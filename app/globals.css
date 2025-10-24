@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+/* === site variables (keep) === */
+:root {
+  --background: #ffffff;
+  --foreground: #1b1b1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #1b1b1b;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* === small nav underline animation === */
+.nav-link {
+  position: relative;
+  padding-bottom: 0.25rem;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #111827, #6b7280);
+  transition: width 180ms ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link:focus::after {
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .nav-link {
+    padding-bottom: 0.125rem;
+  }
+}
+
+.bgtext::after {
+  background-image: url("/images/bgText.png");
+  background-repeat: no-repeat;
+  /* ✅ stops repeating */
+  background-position: center;
+  /* optional — centers it */
+  background-size: contain;
+  position: absolute;
+  top: -108px;
+  right: 0;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 140px;
+}
+
+/* ===== Slider & reflection CSS (paste into globals.css) ===== */
+/* ---------- Slider / gallery CSS (drop into globals.css) ---------- */
+
+.slider-container {
+  --slick-gutter: 12px;
+  position: relative;
+}
+
+.slider-container .card {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+.slider-container .slick-slide {
+  padding-left: var(--slick-gutter);
+  padding-right: var(--slick-gutter);
+  transition: transform .35s cubic-bezier(.2, .9, .2, 1), opacity .25s ease, filter .25s ease;
+}
+
+/* wrapper: use a fixed height that scales per breakpoint (kept in JSX for simplicity) */
+.imgWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* ensure images fit fully and are not cropped */
+.imgWrap img {
+  object-fit: contain !important;
+  object-position: center !important;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* center slide scale-up */
+.slider-container .slick-center .mainImage {
+  transform: scale(1.70);
+  transition: transform .35s cubic-bezier(.2, .9, .2, 1);
+}
+
+/* non-center slides slightly smaller/dimmed for depth */
+.slider-container .slick-slide:not(.slick-center) .mainImage {
+  transform: scale(1.20);
+  opacity: 1;
+  filter: brightness(0.98);
+}
+
+/* slick dots removed (we set dots:false), but ensure default positions look right */
+.slider-container .slick-dots {
+  bottom: -18px;
+}
+
+/* arrow small round look */
+.slider-container .slick-prev,
+.slider-container .slick-next {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+}
+
+.slider-container .slick-prev {
+  left: 8px;
+}
+
+.slider-container .slick-next {
+  right: 8px;
+}
+
+.slider-container .slick-prev:before,
+.slider-container .slick-next:before {
+  color: #111;
+  font-size: 14px;
+  opacity: .9;
+}
+
+/* caption center below */
+.slider-gallery-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  pointer-events: none;
+}
+
+.slider-gallery-caption .caption-arrows {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.slider-gallery-caption .caption-title {
+  font-weight: 700;
+  text-align: center;
+}
+
+/* responsive: smaller paddings and heights */
+@media (max-width: 1024px) {
+  .slider-container {
+    --slick-gutter: 10px;
+  }
+
+  .slider-container .slick-prev,
+  .slider-container .slick-next {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slider-container {
+    --slick-gutter: 8px;
+  }
+
+  .slider-gallery-caption {
+    gap: 18px;
+  }
+
+  .slider-container .slick-center .mainImage {
+    transform: scale(1.04);
+  }
+}
+
+/* Collection overlay card styles */
+.collection-overlay {
+  /* mobile: static centered under image */
+  position: absolute;
+  width: 86%;
+  max-width: 380px;
+  margin: 1rem 0 0 -37px;
+  padding: 9%;
+  background: rgba(255, 255, 255, 0.7);
+
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+/* desktop: place overlay absolutely over image and centered vertically */
+/* @media (min-width: 768px) {
+  .collection-overlay {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    max-width: 36%;
+    margin: 0;
+    padding: 22px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+} */
+
+/* slight lift on hover of image block */
+.relative.overflow-hidden.rounded-md:hover .collection-overlay {
+  transform: translateY(-54%);
+  box-shadow: 0 18px 45px rgba(17, 24, 39, 0.10);
+}
+
+/* smaller text adjustments */
+.collection-overlay h4 {
+  font-size: 23px;
+  line-height: 1;
+  letter-spacing: .12em;
+}
+
+.collection-overlay p {
+  font-size: 17px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.boxshad {
+  box-shadow: 0 40px 72px -16px #00000038;
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.05) rotate(2deg);
+    opacity: 1;
+  }
+}
+
+.sparkle {
+  animation: sparkle 2.5s infinite ease-in-out;
+}
+
+.bgpo {
+  position: absolute;
+  z-index: 1;
+  right: 426px;
+  top: 138px;
+  background-position: left top -5548px;
+}
